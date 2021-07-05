@@ -50,8 +50,8 @@ const JSTableDefaultConfig = {
 
     // Customise the layout
     layout: {
-        top: "{select}{search}",
-        bottom: "{info}{pager}"
+        top: "{search}",
+        bottom: "{select}{info}{pager}"
     },
 
     // server side
@@ -196,6 +196,7 @@ class JSTable {
 
         this._updatePagination();
         this._updateInfo();
+        this.update();
 
     }
 
