@@ -26,12 +26,12 @@
   <nav>
     <ul class="list-reset md:flex md:items-center">
       <li class="md:ml-4">
-        <a routerLink="/login" class="block no-underline hover:underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0" href="#">
+        <a routerLink="/auth/login" class="block no-underline hover:underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0" href="#">
           ♥ Login Page
         </a>
       </li>
       <li class="md:ml-4">
-        <a routerLink="/myprofile" lass="border-t block no-underline hover:underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0" href="#">
+        <a routerLink="/myprofile" class="border-t block no-underline hover:underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0" href="#">
           My Profile
         </a>
       </li>
@@ -42,51 +42,25 @@
 <main>
   <router-outlet></router-outlet>
   <div class="bg-white dark:bg-gray-800">
-    <a routerLink="/login" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-      <div class="github-star-badge">
-        ♥ Login Page
-      </div>
-    </a>
+
   </div>
   <ul class="resources">
     <li class="col-span-2">
-      <!-- [routerLink]="['myprofile']"  -->
-      <a routerLink="/myprofile" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-        MY PROFILE
-      </a>
-    </li>
-    <li class="col-span-2">
-      <a
-        class="resource flex"
-        href="https://nx.dev/latest/angular/getting-started/intro"
-      >
-        Nx video tutorial
-      </a>
-    </li>
-    <li class="col-span-2">
-      <a
-        class="resource flex"
-        href="https://nx.dev/latest/angular/tutorial/01-create-application"
-      >
-        Interactive tutorial
-      </a>
-    </li>
-    <li class="col-span-2">
-      <span class="gutter-left">Nx Cloud</span>
     </li>
   </ul>
   <details open>
     <summary>Add UI library</summary>
-    <pre>ui</pre
-    >
+      <!-- [routerLink]="['myprofile']"  -->
+      <a routerLink="/myprofile" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+        MY PROFILE
+      </a>
   </details>
   <details>
     <summary>View dependency graph</summary>
-    <pre>nx dep-graph</pre>
-  </details>
-  <details>
-    <summary>Run affected commands</summary>
-    <pre>c</pre
-    >
+    <a routerLink="/login2" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+      <div class="github-star-badge">
+        OLD LOGIN
+      </div>
+    </a>
   </details>
 </main>

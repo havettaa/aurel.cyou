@@ -1,4 +1,7 @@
 # aurel.cyou
+
+Angular Nx single page web application for mobile devices with NgRx store
+
 |NX workspace|unchecked|crossed|
 |---|---|---|
 |&check;|_|&cross;|
