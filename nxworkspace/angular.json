@@ -1,0 +1,176 @@
+{
+  "version": 1,
+  "projects": {
+    "auth": {
+      "projectType": "library",
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
+      "prefix": "nxworkspace",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth"],
+          "options": {
+            "jestConfig": "libs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/auth/src/**/*.ts",
+              "libs/auth/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "waka-core": {
+      "projectType": "library",
+      "root": "libs/waka-core",
+      "sourceRoot": "libs/waka-core/src",
+      "prefix": "nxworkspace",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/waka-core"],
+          "options": {
+            "jestConfig": "libs/waka-core/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/waka-core/src/**/*.ts",
+              "libs/waka-core/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "wakapp": {
+      "projectType": "application",
+      "root": "apps/wakapp",
+      "sourceRoot": "apps/wakapp/src",
+      "prefix": "nxworkspace",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/wakapp",
+            "index": "apps/wakapp/src/index.html",
+            "main": "apps/wakapp/src/main.ts",
+            "polyfills": "apps/wakapp/src/polyfills.ts",
+            "tsConfig": "apps/wakapp/tsconfig.app.json",
+            "assets": ["apps/wakapp/src/favicon.ico", "apps/wakapp/src/assets"],
+            "styles": ["apps/wakapp/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/wakapp/src/environments/environment.ts",
+                  "with": "apps/wakapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "wakapp:build:production"
+            },
+            "development": {
+              "browserTarget": "wakapp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "wakapp:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/wakapp/src/**/*.ts",
+              "apps/wakapp/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/wakapp"],
+          "options": {
+            "jestConfig": "apps/wakapp/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "wakapp-e2e": {
+      "root": "apps/wakapp-e2e",
+      "sourceRoot": "apps/wakapp-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/wakapp-e2e/cypress.json",
+            "devServerTarget": "wakapp:serve:development",
+            "tsConfig": "apps/wakapp-e2e/tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "wakapp:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/wakapp-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["wakapp"]
+    }
+  }
+}

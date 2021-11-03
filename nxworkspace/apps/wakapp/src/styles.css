@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+    --theme-color: #6bd052;
+  }
+
+
+.btn {
+  background-color: var(--theme-color);
+}
