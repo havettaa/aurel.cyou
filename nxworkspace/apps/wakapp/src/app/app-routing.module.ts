@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { FullLayoutComponent } from './layout/components/full-layout/full-layout.component';
 
 import { authRoutes, AuthModule } from '@nxworkspace/auth'; 
 
@@ -18,7 +19,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'myprofile',
+    component: FullLayoutComponent,
     loadChildren: () =>
+
       import('./my-profile/my-profile.module').then((m) => m.MyProfileModule),
   },
 ];

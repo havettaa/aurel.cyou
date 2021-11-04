@@ -3,10 +3,56 @@
 @import 'tailwindcss/utilities';
 
 :root {
-    --theme-color: #6bd052;
-  }
+  --colorPrimary: #EA573E;
+  --colorPrimaryDark: #884400;
 
+  --colorSecondary: #14173D;
+  --colorSecondaryDark: #121749;
+  
+  --colorTertiary: #1FD6BA;
+  --colorTertiaryDark: #00AA88;
 
-.btn {
-  background-color: var(--theme-color);
+  --colorNeutral: #FFFFFF;
+  --colorNeutralDark: #AAAAAA;
+}
+
+body {
+  color: var(--colorSecondary);
+  background-color: var(--colorNeutral);
+}
+
+.bg-dark {
+  background-color: var(--colorSecondaryDark);
+}
+
+h1 {
+  color: var(--colorPrimary);
+  background-color: var(--colorSecondaryDark);
+}
+
+h2 {
+  color: var(--colorNeutral);
+  background-color: var(--colorSecondaryDark);
+}
+
+h3 {
+  color: var(--colorSecondary);
+  
+}
+
+h4 {
+  color: var(--colorSecondary);
+  
+}
+
+h5 {
+  color: var(--colorTertiary);
+}
+
+h6 {
+  color: var(--colorPrimary);
+}
+
+button {
+  border-color: var(--colorPrimary);
 }

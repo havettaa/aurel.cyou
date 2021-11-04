@@ -10,6 +10,9 @@ module.exports = {
   },
   darkMode: 'media', // or 'media' or 'class'
   theme: {
+    colors: {
+      dark: '#121749',
+    },
     container: {
       padding: '2rem',
     },
