@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { MinimalLayoutComponent } from './layout/components/minimal-layout/minimal-layout.component';
 import { FullLayoutComponent } from './layout/components/full-layout/full-layout.component';
 
 import { authRoutes, AuthModule } from '@nxworkspace/auth'; 
 
 const appRoutes: Routes = [
-  { path: 'auth', children: authRoutes
+  {
+    path: 'auth',
+    component: MinimalLayoutComponent,
+    children: authRoutes,
     // loadChildren: () =>
     //   import('@nxworkspace/auth/auth.module').then((m) => m.AuthModule),
   },
