@@ -17,11 +17,13 @@
 }
 
 body {
+  height: 100%;
   color: var(--colorSecondary);
   background-color: var(--colorNeutral);
 }
 
 .bg-dark {
+  color: var(--colorNeutral);
   background-color: var(--colorSecondaryDark);
 }
 

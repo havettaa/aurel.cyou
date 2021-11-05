@@ -68,7 +68,15 @@
             "main": "apps/wakapp/src/main.ts",
             "polyfills": "apps/wakapp/src/polyfills.ts",
             "tsConfig": "apps/wakapp/tsconfig.app.json",
-            "assets": ["apps/wakapp/src/favicon.ico", "apps/wakapp/src/assets"],
+            "assets": [
+              "apps/wakapp/src/favicon.ico",
+              "apps/wakapp/src/assets", 
+              {
+                "glob": "**/*",
+                "input": "libs/waka-core/src/assets/",
+                "output": "./assets/"
+              },
+            ],
             "styles": ["apps/wakapp/src/styles.css"],
             "scripts": []
           },
