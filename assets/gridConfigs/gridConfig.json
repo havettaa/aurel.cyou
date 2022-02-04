@@ -1,0 +1,23 @@
+{
+    "collection":[
+        {    
+            "module": "statistic",
+            "gridId": "grid",
+
+            "columns": [
+                {"id": "g3e_fid",            "widthClass": "width01",   "fromToFilter": true,                                                        "filter": { "sortOrder": "up",    "orderIndex": 1, "fromTo": [null, null] } },
+                {"id": "person",             "widthClass": "width05",   "textSearchFilter": true,                                                    "filter": { "sortOrder": "down",  "orderIndex": 2, "text": "" } }
+            ],
+
+            "paginator": { "pageSize": 5, "pageSizeOptions": [5, 10, 20], "pageIndex": 0 },
+            "select": null,
+            "language": null,
+
+            "showClearFilters": true,
+            "showExportToExcel": true,
+
+            "defaultOrderBy": null,
+            "defaultFilter": null
+        }
+    ]
+}
