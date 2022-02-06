@@ -1,0 +1,1 @@
+import{html as e,add as r}from"../../common/createHtml";export class DataGridFilter{render(){return console.warn("render"),e("div","","",[e("input","m-1 p-2","\u{1f4dc} yyuy"),r(e("button","m-1 p-2","\u{1f4dc} Refresh"),"onclick",()=>{console.log("Refresh clicked")})])}setColumnFilterType(){}}
