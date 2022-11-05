@@ -19,7 +19,7 @@ export default {
           Welcome
         </button>
       </div>
-      <div class="navbar-collapse collapse grow items-center" id="navbarSupportedContentY">
+      <div class="">
         <ul class="navbar-nav mr-auto lg:flex lg:flex-row">
           <navbutton @click="logoutClick()">Logout</navbutton>
         </ul>

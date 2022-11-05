@@ -27,7 +27,7 @@ app.mount('#app');
   const myCcxt = await import("https://unpkg.com/ccxt");
   // const myCcxt = await import("https://unpkg.com/ccxt@1.92.30/dist/ccxt.browser.js");
   // await new Promise(resolve => setTimeout(function(){console.warn("HALOO");console.log(ccxt?.exchanges)}, 2200));
-  console.error(ccxt?.exchanges);
+  console.table(ccxt?.exchanges);
   state.setCCXT(ccxt);
 })();
 
