@@ -13,15 +13,32 @@ const app = createApp({
   }
 })
 
-app.component("navbar", navBar )
-app.component("navbutton", navButton )
-app.component("appfooter", footer )
-app.component("tradepanel", tradePanel )
-app.component("rightsidepanel", rightSidePanel )
+app.component("navbar", navBar );
+app.component("navbutton", navButton );
+app.component("appfooter", footer );
+app.component("tradepanel", tradePanel );
+app.component("rightsidepanel", rightSidePanel );
 
-app.mount('#app')
+app.mount('#app');
+
+//////////////////////////////////////////////////////////////////////////////
+// CCXT library
+(async () => {
+  const myCcxt = await import("https://unpkg.com/ccxt");
+  // const myCcxt = await import("https://unpkg.com/ccxt@1.92.30/dist/ccxt.browser.js");
+  // await new Promise(resolve => setTimeout(function(){console.warn("HALOO");console.log(ccxt?.exchanges)}, 2200));
+  console.error(ccxt?.exchanges);
+  state.setCCXT(ccxt);
+})();
+
+// (async () => {
+//   console.log(typeof ccxt);
+//   state.ccxt = ccxt;
+// })();
 
 
+//////////////////////////////////////////////////////////////////////////////
+// Binance Web Socket
 const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${state.symbol.toLowerCase().replace("/", "")}@trade`);
 ws.onmessage = function (event) {
   try {
@@ -34,12 +51,9 @@ ws.onmessage = function (event) {
   }
 };
 
-// Helper function to display thousands in K format
-const formatThousands = (value) => Intl.NumberFormat('en-US', {
-  maximumSignificantDigits: 3,
-  notation: 'compact',
-}).format(value);
-
+//////////////////////////////////////////////////////////////////////////////
+// A chart built with Chart.js 3
+// https://www.chartjs.org/
 // Define Chart.js default settings
 Chart.defaults.font.family = '"Inter", sans-serif';
 Chart.defaults.font.weight = '500';
@@ -59,8 +73,12 @@ Chart.defaults.plugins.tooltip.caretPadding = 20;
 Chart.defaults.plugins.tooltip.cornerRadius = 4;
 Chart.defaults.plugins.tooltip.padding = 8;
 
-// A chart built with Chart.js 3
-// https://www.chartjs.org/
+const formatThousands = (value) => Intl.NumberFormat('en-US', {
+  // Helper function to display thousands in K format
+  maximumSignificantDigits: 3,
+  notation: 'compact',
+}).format(value);
+
 const ctx = document.getElementById('analytics-card-01');
 const chart = new Chart(ctx, {
   type: 'line',

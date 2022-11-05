@@ -20,7 +20,7 @@ export default {
       </button>
     </div>
     <div class="flex justify-center flex-grow p-4 overflow-y-auto">
-      <div class="bg-white rounded-lg border border-gray-200 text-gray-900">
+      <div v-show="state.ccxt != null" class="bg-white rounded-lg border border-gray-200 text-gray-900">
         <button
           v-for="item in state.ccxt?.exchanges"
           disabled=""
@@ -40,6 +40,7 @@ export default {
           {{ item }}
         </button>
       </div>
+      <div v-show="state.ccxt === null">Loading...</div>
     </div>
   </div>
   `
