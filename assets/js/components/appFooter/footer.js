@@ -99,7 +99,7 @@ export default {
           Useful links
         </h6>
         <p class="mb-4">
-          <a href="#!" class="text-gray-600">Settings</a>
+          <a href="admin" class="text-gray-600">Admin</a>
         </p>
         <p>
           <a href="#!" class="text-gray-600">Local Storage</a>
