@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.min.css" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+  <header hx-get="header.html" hx-trigger="load">
+    <ins>=</ins>
+  </header>
+
+  <main class="pt-20">
+    <section hx-ext='client-side-templates' class="h-full bg-gray-200 text-gray-800 p-4 lg:p-8">
+
+      <button hx-get="http://localhost:3333/price" hx-target="#content" class="btn bg-yellow-500">price</button>
+      <button hx-get="http://localhost:3333/buyPrice" hx-target="#content" class="btn bg-amber-400">buyPrice</button>
+      <button hx-get="http://localhost:3333/balance" hx-target="#content" class="btn bg-orange-400">balance</button>
+      <button hx-get="http://localhost:3333/ordersClosedSell" hx-target="#content" class="btn bg-pink-200">sells</button>
+      <button hx-get="http://localhost:3333/ordersClosedBuy" hx-target="#content" class="btn bg-green-200">buys</button>
+      <button hx-get="http://localhost:3333/orders" hx-target="#content" class="btn btn-primary">Open Orders</button>
+      <button hx-get="http://localhost:3333/sell" hx-target="#content" class="btn btn-secondary">sell</button>
+      <button hx-get="http://localhost:3333/buy" hx-target="#content" class="btn btn-accent">buy</button>
+      <button hx-get="http://localhost:3333/cancelSell" hx-target="#content" class="btn bg-pink-500">cancel sell</button>
+      <button hx-get="http://localhost:3333/cancelBuy" hx-target="#content" class="btn bg-green-400">cancel buy</button>
+
+      <p id="jsonformated" class="m-8 text-sm"></p>
+      <p id="content" class="m-8 text-xs"></p>
+
+      <aside class="flex items-center mb-1">
+        <h1 class="flex-grow text-xl">Open Orders</h1>
+        <button class="py-2 px-4 rounded bg-blue-500 text-white flex-grow-0"
+                type="button"
+                hx-trigger="load, click"
+                hx-get="http://localhost:3333/orders" 
+                nunjucks-template="nunjucksTemplate"
+                hx-target="#list"
+                hx-swap="innerHTML">Reload</button>   
+      </aside>
+
+      <p id="list" class="m-8"></p>
+
+      <script id="nunjucksTemplate" type="nunjucks">
+        {% for itm in jsonData %}
+          <li class="relative -mb-px block border p-1 border-grey">
+            <b>{{itm.side}}</b> ({{itm.amount}}) at {{itm.price}}<br>
+          </li>
+        {% endfor %}
+      </script>
+
+      <script type="module">
+      import JSONFormatter from 'https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.esm.min.js'
+
+      htmx.defineExtension('client-side-templates', {
+        transformResponse : function(text, xhr, elt) {
+          const jsonformated = htmx.find('#jsonformated');
+          jsonformated.innerHTML = '';
+
+          const jsonParsed = JSON.parse(text);
+          if (!jsonParsed) {
+            return text;
+          }
+
+          jsonformated.appendChild((new JSONFormatter(jsonParsed)).render());
+
+          const nunjucksTemplate = htmx.closest(elt, "[nunjucks-template]");
+          if (nunjucksTemplate) {
+            var templateName = nunjucksTemplate.getAttribute('nunjucks-template');
+            var template = htmx.find('#' + templateName);
+            return nunjucks.renderString(template.innerHTML, { jsonData: jsonParsed });
+          }
+          return text;
+        }
+      });
+      </script>
+    </section>
+  </main>
+  <!-- <script src="../js/htmx.min.js"></script> -->
+  <script src="https://unpkg.com/htmx.org" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+</body>
+</html>
