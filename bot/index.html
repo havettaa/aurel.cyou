@@ -47,7 +47,7 @@
       <p id="xy" class="m-8"></p>
 
       <script id="tpl" type="nunjucks">
-        {% for itm in jsonData %}
+        {% for itm in jsonData.dataArray %}
           <li class="relative -mb-px block border p-1 border-grey">
             <i>{{itm.datetime.replace("T", " | ")}}</i>  |  <b>{{itm.side.toUpperCase()}}</b> ({{itm.amount}}) at {{itm.price}}<br>
           </li>
