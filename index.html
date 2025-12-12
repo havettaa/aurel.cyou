@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETH Trading Bot - Backtest Results</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Trading Bot Backtest Results - Summary</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +14,6 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
             padding: 20px;
             min-height: 100vh;
         }
@@ -23,577 +21,398 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
             text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
         }
 
         h1 {
-            color: #667eea;
             font-size: 2.5em;
+            color: #2d3748;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            color: #666;
+            color: #718096;
             font-size: 1.1em;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-label {
-            color: #888;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-value.profit {
-            color: #10b981;
-        }
-
-        .stat-value.return {
-            color: #f59e0b;
-        }
-
-        .stat-subvalue {
-            font-size: 0.6em;
-            color: #999;
-            margin-top: 5px;
-        }
-
-        .chart-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
-        }
-
-        .chart-title {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        canvas {
-            max-height: 400px;
-        }
-
-        .table-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow-x: auto;
-            margin-bottom: 30px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
+        .strategy-info {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover {
-            background: #f8f9ff;
-        }
-
-        .positive {
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .negative {
-            color: #ef4444;
-            font-weight: 600;
-        }
-
-        .config-section {
-            background: white;
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
         }
 
-        .config-grid {
+        .strategy-info h2 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .strategy-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            margin-top: 15px;
         }
 
-        .config-item {
-            padding: 12px;
-            background: #f8f9ff;
+        .strategy-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
         }
 
-        .config-label {
+        .strategy-label {
             font-size: 0.85em;
-            color: #666;
-            margin-bottom: 4px;
+            opacity: 0.9;
+            margin-bottom: 5px;
         }
 
-        .config-value {
-            font-size: 1.1em;
+        .strategy-value {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .duration-section {
+            margin-bottom: 50px;
+        }
+
+        .duration-header {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .duration-header h2 {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .duration-stats {
+            color: #718096;
+            font-size: 0.95em;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .coin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .coin-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .coin-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
             font-weight: 600;
-            color: #333;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #f6d365, #fda085); }
+        .rank-2 { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #2d3748; }
+        .rank-3 { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .metric-value.positive {
+            color: #48bb78;
+        }
+
+        .metric-value.large {
+            font-size: 2em;
+        }
+
+        .view-indicator {
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 600;
         }
 
         footer {
             text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            color: #718096;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
-            margin-top: 40px;
-            padding: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .highlight-box h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .highlight-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .highlight-stat {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .highlight-stat-label {
             font-size: 0.9em;
+            opacity: 0.9;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .badge.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge.warning {
-            background: #fef3c7;
-            color: #92400e;
+        .highlight-stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📈 ETH Trading Bot Backtest</h1>
-            <p class="subtitle">No Stop Loss Strategy - Daily Performance Analysis</p>
+            <h1>🚀 Trading Bot Backtest Results</h1>
+            <p class="subtitle">Comprehensive Performance Analysis - No Stop Loss Strategy</p>
         </header>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Initial Capital</div>
-                <div class="stat-value">$<span id="initialCapital">0</span></div>
+        <div class="strategy-info">
+            <h2>📊 Strategy Configuration</h2>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <div class="strategy-label">Initial Capital</div>
+                    <div class="strategy-value">$1,200</div>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-label">Leverage</div>
+                    <div class="strategy-value">3x</div>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-label">Price Target</div>
+                    <div class="strategy-value">1% (3% with leverage)</div>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-label">Position Size</div>
+                    <div class="strategy-value">10% of balance</div>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-label">Trading Fee</div>
+                    <div class="strategy-value">0.05%</div>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-label">Stop Loss</div>
+                    <div class="strategy-value">None</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Final Capital</div>
-                <div class="stat-value profit">$<span id="finalCapital">0</span></div>
-                <div class="stat-subvalue">Available: $<span id="availableCapital">0</span></div>
+        </div>
+
+        <div class="highlight-box">
+            <h2>🏆 Best Performance - 365 Days</h2>
+            <div class="highlight-stats">
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Top Performer</div>
+                    <div class="highlight-stat-value">SOL</div>
+                </div>
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Return</div>
+                    <div class="highlight-stat-value">946.66%</div>
+                </div>
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Final Capital</div>
+                    <div class="highlight-stat-value">$12,560</div>
+                </div>
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Total Trades</div>
+                    <div class="highlight-stat-value">359</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Profit</div>
-                <div class="stat-value profit">$<span id="totalProfit">0</span></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Return</div>
-                <div class="stat-value return"><span id="totalReturn">0</span>%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Completed Trades</div>
-                <div class="stat-value"><span id="completedTrades">0</span></div>
-                <div class="stat-subvalue">Win Rate: <span id="winRate">0</span>%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Open Positions</div>
-                <div class="stat-value"><span id="openPositions">0</span></div>
-                <div class="stat-subvalue">Invested: $<span id="investedCapital">0</span></div>
-            </div>
         </div>
 
-        <div class="config-section">
-            <h2 class="chart-title">⚙️ Strategy Configuration</h2>
-            <div class="config-grid" id="configGrid"></div>
-        </div>
-
-        <div class="chart-container">
-            <h2 class="chart-title">📊 Capital Growth Over Time</h2>
-            <canvas id="capitalChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2 class="chart-title">💰 Daily Capital Components</h2>
-            <canvas id="componentsChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2 class="chart-title">📈 ETH Price Movement</h2>
-            <canvas id="priceChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2 class="chart-title">🔄 Position Activity</h2>
-            <canvas id="activityChart"></canvas>
-        </div>
-
-        <div class="table-container">
-            <h2 class="chart-title">✅ Completed Trades (Last 20)</h2>
-            <table id="tradesTable">
-                <thead>
-                    <tr>
-                        <th>Entry Day</th>
-                        <th>Close Day</th>
-                        <th>Entry Date</th>
-                        <th>Close Date</th>
-                        <th>Entry Price</th>
-                        <th>Exit Price</th>
-                        <th>Days Held</th>
-                        <th>P&L</th>
-                        <th>Return %</th>
-                    </tr>
-                </thead>
-                <tbody id="tradesBody"></tbody>
-            </table>
-        </div>
-
-        <div class="table-container" id="openPositionsSection" style="display: none;">
-            <h2 class="chart-title">⏳ Open Positions (Waiting for Target)</h2>
-            <table id="openPositionsTable">
-                <thead>
-                    <tr>
-                        <th>Entry Day</th>
-                        <th>Entry Date</th>
-                        <th>Entry Price</th>
-                        <th>Target Price</th>
-                        <th>Invested</th>
-                        <th>Days Waiting</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="openPositionsBody"></tbody>
-            </table>
-        </div>
+        <div id="results-container"></div>
 
         <footer>
-            <p>🚀 Generated from bot_backtest_results.json</p>
-            <p>ETH/USDT No Stop Loss Strategy - Run `node bot_backtest.js` to update</p>
+            <p><strong>🤖 Generated with Trading Bot Backtesting System</strong></p>
+            <p>Run <code>node bot_backtest.js</code> to regenerate all reports</p>
         </footer>
     </div>
 
     <script>
-        // Load and process data
-        fetch('bot_backtest_results.json')
-            .then(response => response.json())
-            .then(data => {
-                displaySummary(data.summary);
-                displayConfig(data.config);
-                createCharts(data.dailySnapshots);
-                populateTradesTable(data.completedTrades);
-                populateOpenPositions(data.openPositions);
-            })
-            .catch(error => {
-                console.error('Error loading data:', error);
-                document.body.innerHTML = '<div style="color: white; text-align: center; padding: 50px;"><h1>❌ Error loading backtest results</h1><p>Please run <code>node bot_backtest.js</code> to generate bot_backtest_results.json</p></div>';
-            });
+        const results = [
+            // 60 days
+            { symbol: 'SOLUSDT', days: 60, returns: 56.75, capital: 1881, trades: 58, open: 2, rank: 1 },
+            { symbol: 'ETHUSDT', days: 60, returns: 47.02, capital: 1764, trades: 56, open: 4, rank: 2 },
+            { symbol: 'BTCUSDT', days: 60, returns: 40.01, capital: 1680, trades: 55, open: 5, rank: 3 },
+            // 120 days
+            { symbol: 'SOLUSDT', days: 120, returns: 110.23, capital: 2523, trades: 114, open: 6, rank: 1 },
+            { symbol: 'ETHUSDT', days: 120, returns: 97.29, capital: 2367, trades: 113, open: 7, rank: 2 },
+            { symbol: 'BTCUSDT', days: 120, returns: 75.33, capital: 2104, trades: 112, open: 8, rank: 3 },
+            // 180 days
+            { symbol: 'SOLUSDT', days: 180, returns: 240.63, capital: 4088, trades: 174, open: 6, rank: 1 },
+            { symbol: 'ETHUSDT', days: 180, returns: 223.27, capital: 3879, trades: 173, open: 7, rank: 2 },
+            { symbol: 'BTCUSDT', days: 180, returns: 157.10, capital: 3085, trades: 172, open: 8, rank: 3 },
+            // 365 days
+            { symbol: 'SOLUSDT', days: 365, returns: 946.66, capital: 12560, trades: 359, open: 6, rank: 1 },
+            { symbol: 'ETHUSDT', days: 365, returns: 689.39, capital: 9473, trades: 358, open: 7, rank: 2 },
+            { symbol: 'BTCUSDT', days: 365, returns: 609.74, capital: 8517, trades: 357, open: 8, rank: 3 }
+        ];
 
-        function formatNumber(num) {
-            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
-            return num.toFixed(2);
-        }
+        const durations = [60, 120, 180, 365];
+        const container = document.getElementById('results-container');
 
-        function displaySummary(summary) {
-            document.getElementById('initialCapital').textContent = formatNumber(summary.initialCapital);
-            document.getElementById('finalCapital').textContent = formatNumber(summary.finalCapital);
-            document.getElementById('availableCapital').textContent = formatNumber(summary.availableCapital);
-            document.getElementById('totalProfit').textContent = formatNumber(summary.totalProfit);
-            document.getElementById('totalReturn').textContent = summary.totalReturn.toFixed(2);
-            document.getElementById('completedTrades').textContent = summary.completedTrades;
-            document.getElementById('winRate').textContent = summary.winRate.toFixed(0);
-            document.getElementById('openPositions').textContent = summary.openPositions;
-            document.getElementById('investedCapital').textContent = formatNumber(summary.investedCapital);
-        }
+        durations.forEach(days => {
+            const durationResults = results.filter(r => r.days === days);
 
-        function displayConfig(config) {
-            const configGrid = document.getElementById('configGrid');
-            const configItems = [
-                { label: 'Initial Capital', value: '$' + config.initialCapital.toLocaleString() },
-                { label: 'Leverage', value: config.leverage + 'x' },
-                { label: 'Price Target', value: config.priceTargetPercent + '%' },
-                { label: 'Position Size', value: (config.positionSizePercent * 100) + '% of balance' },
-                { label: 'Trading Fee', value: (config.tradingFee * 100) + '%' },
-                { label: 'Stop Loss', value: 'None (Hold until target)' }
-            ];
+            const section = document.createElement('div');
+            section.className = 'duration-section';
 
-            configItems.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'config-item';
-                div.innerHTML = `
-                    <div class="config-label">${item.label}</div>
-                    <div class="config-value">${item.value}</div>
-                `;
-                configGrid.appendChild(div);
-            });
-        }
+            const header = document.createElement('div');
+            header.className = 'duration-header';
 
-        function createCharts(dailySnapshots) {
-            const labels = dailySnapshots.map(s => 'Day ' + s.day);
-            const dates = dailySnapshots.map(s => s.date);
+            const avgReturn = (durationResults.reduce((sum, r) => sum + r.returns, 0) / 3).toFixed(2);
+            const totalTrades = durationResults.reduce((sum, r) => sum + r.trades, 0);
 
-            // Capital Growth Chart
-            new Chart(document.getElementById('capitalChart'), {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Total Capital',
-                        data: dailySnapshots.map(s => s.totalCapital),
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: true },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    return dailySnapshots[context[0].dataIndex].date;
-                                },
-                                label: function(context) {
-                                    return 'Total: $' + context.parsed.y.toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + formatNumber(value);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            header.innerHTML = `
+                <h2>📅 ${days}-Day Backtest Results</h2>
+                <div class="duration-stats">
+                    Average Return: ${avgReturn}% | Total Trades Executed: ${totalTrades}
+                </div>
+            `;
 
-            // Components Chart (Stacked)
-            new Chart(document.getElementById('componentsChart'), {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: 'Available Capital',
-                            data: dailySnapshots.map(s => s.availableCapital),
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.5)',
-                            borderWidth: 2,
-                            fill: true
-                        },
-                        {
-                            label: 'Invested in Positions',
-                            data: dailySnapshots.map(s => s.investedCapital),
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'rgba(245, 158, 11, 0.5)',
-                            borderWidth: 2,
-                            fill: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: true }
-                    },
-                    scales: {
-                        y: {
-                            stacked: true,
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + formatNumber(value);
-                                }
-                            }
-                        },
-                        x: {
-                            stacked: true
-                        }
-                    }
-                }
-            });
+            const grid = document.createElement('div');
+            grid.className = 'results-grid';
 
-            // Price Chart
-            new Chart(document.getElementById('priceChart'), {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'ETH Price ($)',
-                        data: dailySnapshots.map(s => s.price),
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: true }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toFixed(0);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            durationResults.forEach(result => {
+                const coinName = result.symbol.replace('USDT', '');
+                const fileName = `3x-${coinName}-${days}day.html`;
 
-            // Activity Chart
-            new Chart(document.getElementById('activityChart'), {
-                type: 'bar',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: 'Open Positions',
-                            data: dailySnapshots.map(s => s.openPositions),
-                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
-                            borderColor: '#f59e0b',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Trades Closed',
-                            data: dailySnapshots.map(s => s.tradesClosedToday),
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                            borderColor: '#10b981',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: true }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-        }
+                const card = document.createElement('a');
+                card.className = 'result-card';
+                card.href = fileName;
 
-        function populateTradesTable(trades) {
-            const tbody = document.getElementById('tradesBody');
-            const recentTrades = trades.slice(-20).reverse();
+                const rankClass = result.rank === 1 ? 'rank-1' : result.rank === 2 ? 'rank-2' : 'rank-3';
+                const medal = result.rank === 1 ? '🥇' : result.rank === 2 ? '🥈' : '🥉';
 
-            recentTrades.forEach(trade => {
-                const row = document.createElement('tr');
-                const profitClass = trade.pnl >= 0 ? 'positive' : 'negative';
-
-                row.innerHTML = `
-                    <td><strong>Day ${trade.entryDay}</strong></td>
-                    <td><strong>Day ${trade.closeDay}</strong></td>
-                    <td>${trade.entryDate}</td>
-                    <td>${trade.closeDate}</td>
-                    <td>$${trade.entryPrice.toFixed(2)}</td>
-                    <td>$${trade.exitPrice.toFixed(2)}</td>
-                    <td>${trade.daysHeld} days</td>
-                    <td class="${profitClass}">$${trade.pnl.toFixed(2)}</td>
-                    <td class="${profitClass}">${trade.pnlPercent.toFixed(2)}%</td>
+                card.innerHTML = `
+                    <div class="coin-header">
+                        <div class="coin-name">${coinName}</div>
+                        <div class="coin-badge ${rankClass}">${medal} #${result.rank}</div>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-label">Total Return</div>
+                            <div class="metric-value positive large">${result.returns.toFixed(2)}%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Final Capital</div>
+                            <div class="metric-value">$${result.capital.toLocaleString()}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Completed Trades</div>
+                            <div class="metric-value">${result.trades}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Open Positions</div>
+                            <div class="metric-value">${result.open}</div>
+                        </div>
+                    </div>
+                    <div class="view-indicator">📊 View Detailed Report</div>
                 `;
 
-                tbody.appendChild(row);
+                grid.appendChild(card);
             });
-        }
 
-        function populateOpenPositions(positions) {
-            if (positions.length === 0) return;
-
-            document.getElementById('openPositionsSection').style.display = 'block';
-            const tbody = document.getElementById('openPositionsBody');
-
-            positions.forEach(pos => {
-                const row = document.createElement('tr');
-                const targetNeeded = ((pos.targetPrice / pos.entryPrice - 1) * 100).toFixed(2);
-
-                row.innerHTML = `
-                    <td><strong>Day ${pos.entryDay}</strong></td>
-                    <td>${pos.entryDate}</td>
-                    <td>$${pos.entryPrice.toFixed(2)}</td>
-                    <td>$${pos.targetPrice.toFixed(2)}</td>
-                    <td>$${pos.invested.toFixed(2)}</td>
-                    <td>${pos.daysWaiting} days</td>
-                    <td><span class="badge warning">Needs +${targetNeeded}% to close</span></td>
-                `;
-
-                tbody.appendChild(row);
-            });
-        }
+            section.appendChild(header);
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
     </script>
 </body>
 </html>

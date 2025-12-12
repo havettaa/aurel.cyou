@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETH Trading Bot - Backtest Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-value.profit {
+            color: #10b981;
+        }
+
+        .stat-value.return {
+            color: #f59e0b;
+        }
+
+        .stat-subvalue {
+            font-size: 0.6em;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8f9ff;
+        }
+
+        .positive {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .negative {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .config-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .config-item {
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .config-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .config-value {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📈 <span id="symbolDisplay">Crypto</span> Trading Bot Backtest</h1>
+            <p class="subtitle">No Stop Loss Strategy - Daily Performance Analysis</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Initial Capital</div>
+                <div class="stat-value">$<span id="initialCapital">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Final Capital</div>
+                <div class="stat-value profit">$<span id="finalCapital">0</span></div>
+                <div class="stat-subvalue">Available: $<span id="availableCapital">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Profit</div>
+                <div class="stat-value profit">$<span id="totalProfit">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Return</div>
+                <div class="stat-value return"><span id="totalReturn">0</span>%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Completed Trades</div>
+                <div class="stat-value"><span id="completedTrades">0</span></div>
+                <div class="stat-subvalue">Win Rate: <span id="winRate">0</span>%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Open Positions</div>
+                <div class="stat-value"><span id="openPositions">0</span></div>
+                <div class="stat-subvalue">Invested: $<span id="investedCapital">0</span></div>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h2 class="chart-title">⚙️ Strategy Configuration</h2>
+            <div class="config-grid" id="configGrid"></div>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">📊 Capital Growth Over Time</h2>
+            <canvas id="capitalChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">💰 Daily Capital Components</h2>
+            <canvas id="componentsChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">📈 Price Movement</h2>
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">🔄 Position Activity</h2>
+            <canvas id="activityChart"></canvas>
+        </div>
+
+        <div class="table-container">
+            <h2 class="chart-title">✅ Completed Trades (Last 20)</h2>
+            <table id="tradesTable">
+                <thead>
+                    <tr>
+                        <th>Entry Day</th>
+                        <th>Close Day</th>
+                        <th>Entry Date</th>
+                        <th>Close Date</th>
+                        <th>Entry Price</th>
+                        <th>Exit Price</th>
+                        <th>Days Held</th>
+                        <th>P&L</th>
+                        <th>Return %</th>
+                    </tr>
+                </thead>
+                <tbody id="tradesBody"></tbody>
+            </table>
+        </div>
+
+        <div class="table-container" id="openPositionsSection" style="display: none;">
+            <h2 class="chart-title">⏳ Open Positions (Waiting for Target)</h2>
+            <table id="openPositionsTable">
+                <thead>
+                    <tr>
+                        <th>Entry Day</th>
+                        <th>Entry Date</th>
+                        <th>Entry Price</th>
+                        <th>Target Price</th>
+                        <th>Invested</th>
+                        <th>Days Waiting</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="openPositionsBody"></tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>🚀 Generated from 3x-BTC-180day.json</p>
+            <p>No Stop Loss Strategy - Run `node bot_backtest.js` to update</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load and process data
+        fetch('3x-BTC-180day.json')
+            .then(response => response.json())
+            .then(data => {
+                displaySummary(data.summary);
+                displayConfig(data.config);
+                createCharts(data.dailySnapshots);
+                populateTradesTable(data.completedTrades);
+                populateOpenPositions(data.openPositions);
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.body.innerHTML = '<div style="color: white; text-align: center; padding: 50px;"><h1>❌ Error loading backtest results</h1><p>Please run <code>node bot_backtest.js</code> to generate 3x-BTC-180day.json</p></div>';
+            });
+
+        function formatNumber(num) {
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+            return num.toFixed(2);
+        }
+
+        function displaySummary(summary) {
+            document.getElementById('initialCapital').textContent = formatNumber(summary.initialCapital);
+            document.getElementById('finalCapital').textContent = formatNumber(summary.finalCapital);
+            document.getElementById('availableCapital').textContent = formatNumber(summary.availableCapital);
+            document.getElementById('totalProfit').textContent = formatNumber(summary.totalProfit);
+            document.getElementById('totalReturn').textContent = summary.totalReturn.toFixed(2);
+            document.getElementById('completedTrades').textContent = summary.completedTrades;
+            document.getElementById('winRate').textContent = summary.winRate.toFixed(0);
+            document.getElementById('openPositions').textContent = summary.openPositions;
+            document.getElementById('investedCapital').textContent = formatNumber(summary.investedCapital);
+        }
+
+        function displayConfig(config) {
+            // Update symbol in header
+            if (config.symbol) {
+                document.getElementById('symbolDisplay').textContent = config.symbol.replace('USDT', '/USDT');
+                window.tradingSymbol = config.symbol.replace('USDT', '');
+            }
+
+            const configGrid = document.getElementById('configGrid');
+            const configItems = [
+                { label: 'Trading Pair', value: config.symbol || 'N/A' },
+                { label: 'Duration', value: (config.durationDays || 'N/A') + ' days' },
+                { label: 'Initial Capital', value: '$' + config.initialCapital.toLocaleString() },
+                { label: 'Leverage', value: config.leverage + 'x' },
+                { label: 'Price Target', value: config.priceTargetPercent + '%' },
+                { label: 'Position Size', value: (config.positionSizePercent * 100) + '% of balance' },
+                { label: 'Trading Fee', value: (config.tradingFee * 100) + '%' },
+                { label: 'Stop Loss', value: 'None (Hold until target)' }
+            ];
+
+            configItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'config-item';
+                div.innerHTML = `
+                    <div class="config-label">${item.label}</div>
+                    <div class="config-value">${item.value}</div>
+                `;
+                configGrid.appendChild(div);
+            });
+        }
+
+        function createCharts(dailySnapshots) {
+            const labels = dailySnapshots.map(s => 'Day ' + s.day);
+            const dates = dailySnapshots.map(s => s.date);
+
+            // Capital Growth Chart
+            new Chart(document.getElementById('capitalChart'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Total Capital',
+                        data: dailySnapshots.map(s => s.totalCapital),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return dailySnapshots[context[0].dataIndex].date;
+                                },
+                                label: function(context) {
+                                    return 'Total: $' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + formatNumber(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Components Chart (Stacked)
+            new Chart(document.getElementById('componentsChart'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Available Capital',
+                            data: dailySnapshots.map(s => s.availableCapital),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'Invested in Positions',
+                            data: dailySnapshots.map(s => s.investedCapital),
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.5)',
+                            borderWidth: 2,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + formatNumber(value);
+                                }
+                            }
+                        },
+                        x: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+            // Price Chart
+            const chartSymbol = window.tradingSymbol || 'Price';
+            new Chart(document.getElementById('priceChart'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: chartSymbol + ' ($)',
+                        data: dailySnapshots.map(s => s.price),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Activity Chart
+            new Chart(document.getElementById('activityChart'), {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Open Positions',
+                            data: dailySnapshots.map(s => s.openPositions),
+                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                            borderColor: '#f59e0b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Trades Closed',
+                            data: dailySnapshots.map(s => s.tradesClosedToday),
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: '#10b981',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateTradesTable(trades) {
+            const tbody = document.getElementById('tradesBody');
+            const recentTrades = trades.slice(-20).reverse();
+
+            recentTrades.forEach(trade => {
+                const row = document.createElement('tr');
+                const profitClass = trade.pnl >= 0 ? 'positive' : 'negative';
+
+                row.innerHTML = `
+                    <td><strong>Day ${trade.entryDay}</strong></td>
+                    <td><strong>Day ${trade.closeDay}</strong></td>
+                    <td>${trade.entryDate}</td>
+                    <td>${trade.closeDate}</td>
+                    <td>$${trade.entryPrice.toFixed(2)}</td>
+                    <td>$${trade.exitPrice.toFixed(2)}</td>
+                    <td>${trade.daysHeld} days</td>
+                    <td class="${profitClass}">$${trade.pnl.toFixed(2)}</td>
+                    <td class="${profitClass}">${trade.pnlPercent.toFixed(2)}%</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function populateOpenPositions(positions) {
+            if (positions.length === 0) return;
+
+            document.getElementById('openPositionsSection').style.display = 'block';
+            const tbody = document.getElementById('openPositionsBody');
+
+            positions.forEach(pos => {
+                const row = document.createElement('tr');
+                const targetNeeded = ((pos.targetPrice / pos.entryPrice - 1) * 100).toFixed(2);
+
+                row.innerHTML = `
+                    <td><strong>Day ${pos.entryDay}</strong></td>
+                    <td>${pos.entryDate}</td>
+                    <td>$${pos.entryPrice.toFixed(2)}</td>
+                    <td>$${pos.targetPrice.toFixed(2)}</td>
+                    <td>$${pos.invested.toFixed(2)}</td>
+                    <td>${pos.daysWaiting} days</td>
+                    <td><span class="badge warning">Needs +${targetNeeded}% to close</span></td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
