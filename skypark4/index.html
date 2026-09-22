@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-izbový byt SkyPark 4 | Bottova 5, Bratislava</title>
+<meta name="description" content="3-izbový byt na predaj priamo od majiteľa, Sky Park (4. veža), Bottova 5, Bratislava. 86,7 m², 10. poschodie, výhľad na Ružinov, garážové státie s el. nabíjačkou.">
+<style>
+  :root{
+    --ink:#1b1d1f;
+    --ink-soft:#5b6066;
+    --paper:#faf9f6;
+    --paper-alt:#f0eee8;
+    --line:#e2ddd2;
+    --accent:#3d6b8a;
+    --accent-dark:#294a61;
+    --card:#ffffff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img{display:block;max-width:100%;}
+
+  /* NAV */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,249,246,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .brand{font-weight:700;letter-spacing:.02em;font-size:1.05rem;}
+  .brand span{color:var(--accent-dark);}
+  .nav-links{display:flex;gap:22px;font-size:.92rem;color:var(--ink-soft);}
+  .nav-links a{text-decoration:none;transition:color .15s;}
+  .nav-links a:hover{color:var(--accent-dark);}
+  .nav-cta{
+    background:var(--accent-dark);color:#fff;padding:9px 18px;border-radius:999px;
+    font-size:.88rem;text-decoration:none;white-space:nowrap;
+  }
+  @media (max-width:720px){.nav-links{display:none;}}
+
+  /* HERO */
+  .hero{position:relative;height:72vh;min-height:420px;max-height:680px;overflow:hidden;}
+  .hero-slides{position:absolute;inset:0;cursor:pointer;}
+  .hero-slide{
+    position:absolute;inset:0;opacity:0;transition:opacity .7s ease;
+  }
+  .hero-slide.active{opacity:1;z-index:1;}
+  .hero-slide img{width:100%;height:100%;object-fit:cover;}
+  .hero::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.15) 45%, rgba(15,13,10,0.78) 100%);
+  }
+  .hero-content{
+    position:absolute;left:0;right:0;bottom:0;padding:44px 20px 36px;
+    max-width:1180px;margin:0 auto;color:#fff;z-index:3;
+  }
+  .hero-tag{
+    display:inline-block;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.35);
+    padding:5px 14px;border-radius:999px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .hero h1{margin:0 0 8px;font-size:clamp(1.7rem,4.2vw,2.9rem);font-weight:700;line-height:1.15;}
+  .hero p.loc{margin:0;font-size:1.05rem;opacity:.92;}
+  .hero-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+    background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.4);
+    color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+    transition:background .15s;
+  }
+  .hero-arrow:hover{background:rgba(255,255,255,0.28);}
+  .hero-arrow.prev{left:18px;}
+  .hero-arrow.next{right:18px;}
+  .hero-dots{
+    position:absolute;bottom:20px;right:20px;z-index:4;
+    display:flex;gap:8px;max-width:1180px;
+  }
+  .hero-dot{
+    width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.45);
+    border:none;cursor:pointer;padding:0;transition:background .15s,transform .15s;
+  }
+  .hero-dot.active{background:#fff;transform:scale(1.2);}
+  @media (max-width:600px){
+    .hero-arrow{width:36px;height:36px;font-size:1rem;}
+    .hero-dots{right:16px;bottom:16px;}
+  }
+
+  /* STAT STRIP */
+  .stats{
+    max-width:1180px;margin:-46px auto 0;padding:0 20px;position:relative;z-index:5;
+  }
+  .stats-grid{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:0 10px 40px rgba(20,30,40,0.12);
+    display:grid;grid-template-columns:repeat(4,1fr);
+    overflow:hidden;
+  }
+  .stat{padding:22px 18px;text-align:center;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .v{font-size:1.4rem;font-weight:700;color:var(--accent-dark);}
+  .stat .k{font-size:.78rem;color:var(--ink-soft);margin-top:4px;text-transform:uppercase;letter-spacing:.04em;}
+  @media (max-width:720px){
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .stat{border-bottom:1px solid var(--line);}
+  }
+
+  section{max-width:1180px;margin:0 auto;padding:64px 20px;}
+  .section-head{margin-bottom:30px;}
+  .eyebrow{
+    font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-dark);
+    font-weight:600;margin-bottom:8px;
+  }
+  h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin:0;}
+
+  /* DESCRIPTION */
+  .desc-grid{
+    display:grid;grid-template-columns:1.3fr 1fr;gap:44px;align-items:start;
+  }
+  .desc-grid p{line-height:1.75;color:#2c2d2e;font-size:1.02rem;}
+  .desc-grid p + p{margin-top:16px;}
+  .side-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;
+  }
+  .side-card h3{margin:0 0 14px;font-size:1rem;}
+  .side-card ul{margin:0;padding:0;list-style:none;}
+  .side-card li{
+    display:flex;justify-content:space-between;gap:10px;
+    padding:10px 0;border-bottom:1px solid var(--line);font-size:.94rem;
+  }
+  .side-card li:last-child{border-bottom:none;}
+  .side-card li .k{color:var(--ink-soft);}
+  .side-card li .v{font-weight:600;text-align:right;}
+  .price-note{
+    margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);
+    font-size:.85rem;color:var(--ink-soft);line-height:1.5;
+  }
+  @media (max-width:860px){.desc-grid{grid-template-columns:1fr;}}
+
+  /* FEATURES */
+  .features-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+  }
+  .feature{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;
+  }
+  .feature .ic{
+    width:38px;height:38px;border-radius:10px;background:var(--paper-alt);
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+    font-size:1.15rem;
+  }
+  .feature h4{margin:0 0 6px;font-size:.98rem;}
+  .feature p{margin:0;color:var(--ink-soft);font-size:.89rem;line-height:1.55;}
+  @media (max-width:860px){.features-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.features-grid{grid-template-columns:1fr;}}
+
+  /* GALLERY */
+  .gallery-section{background:var(--paper-alt);}
+  .gallery-tabs{
+    display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;
+  }
+  .tab-btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    padding:8px 16px;border-radius:999px;font-size:.85rem;cursor:pointer;
+    transition:all .15s;
+  }
+  .tab-btn:hover{border-color:var(--accent);}
+  .tab-btn.active{background:var(--accent-dark);color:#fff;border-color:var(--accent-dark);}
+  .gallery-group{display:none;}
+  .gallery-group.active{display:block;}
+  .g-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  }
+  .g-grid .wide{grid-column:span 2;}
+  .g-item{
+    position:relative;border-radius:10px;overflow:hidden;cursor:pointer;
+    aspect-ratio:4/3;background:var(--line);
+  }
+  .g-grid .wide .g-item{aspect-ratio:8/5;}
+  .g-item img{
+    width:100%;height:100%;object-fit:cover;transition:transform .35s ease;
+  }
+  .g-item:hover img{transform:scale(1.05);}
+  @media (max-width:760px){
+    .g-grid{grid-template-columns:repeat(2,1fr);}
+    .g-grid .wide{grid-column:span 2;}
+  }
+  @media (max-width:480px){
+    .g-grid{grid-template-columns:1fr;}
+    .g-grid .wide{grid-column:span 1;}
+  }
+
+  /* LIGHTBOX */
+  .lightbox{
+    display:none;position:fixed;inset:0;z-index:200;background:rgba(10,9,7,0.94);
+    align-items:center;justify-content:center;padding:24px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:84vh;object-fit:contain;border-radius:6px;}
+  .lb-close, .lb-prev, .lb-next{
+    position:absolute;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);
+    color:#fff;border-radius:50%;width:46px;height:46px;cursor:pointer;font-size:1.2rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lb-close{top:20px;right:20px;}
+  .lb-prev{left:20px;top:50%;transform:translateY(-50%);}
+  .lb-next{right:20px;top:50%;transform:translateY(-50%);}
+  .lb-caption{
+    position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#fff;
+    font-size:.9rem;opacity:.85;
+  }
+  @media (max-width:600px){
+    .lb-prev,.lb-next{width:38px;height:38px;font-size:1rem;}
+    .lb-close{width:38px;height:38px;top:12px;right:12px;}
+  }
+
+  /* CTA */
+  .cta{
+    background:var(--accent-dark);color:#fff;border-radius:var(--radius);
+    padding:48px 40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+  }
+  .cta h3{margin:0 0 8px;font-size:1.5rem;}
+  .cta p{margin:0;opacity:.85;max-width:480px;}
+  .cta-btn{
+    background:#fff;color:var(--accent-dark);padding:14px 30px;border-radius:999px;
+    text-decoration:none;font-weight:700;white-space:nowrap;
+  }
+
+  footer{
+    text-align:center;padding:30px 20px;color:var(--ink-soft);font-size:.82rem;
+    border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">Byt <span>SkyPark 4</span></div>
+    <nav class="nav-links">
+      <a href="#o-byte">O byte</a>
+      <a href="#vybava">Vybavenie</a>
+      <a href="#galeria">Fotogaléria</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a class="nav-cta" href="tel:+421911954443">+421 911 954 443</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-slides" id="heroSlides" role="link" tabindex="0" aria-label="Zobraziť fotogalériu">
+    <div class="hero-slide active"><img src="dron.jpg" alt="Letecký pohľad na Sky Park"></div>
+    <div class="hero-slide"><img src="vyhlad1.jpg" alt="Výhľad z bytu na Ružinov"></div>
+    <div class="hero-slide"><img src="vyhlad2.jpg" alt="Výhľad z bytu"></div>
+    <div class="hero-slide"><img src="obyvacka.jfif" alt="Obývacia izba"></div>
+    <div class="hero-slide"><img src="izba.jfif" alt="Izba"></div>
+    <div class="hero-slide"><img src="kupelka1.jpg" alt="Kúpeľňa"></div>
+    <div class="hero-slide"><img src="podorys.jpg" alt="Pôdorys bytu"></div>
+  </div>
+  <button class="hero-arrow prev" id="heroPrev" aria-label="Predchádzajúca fotka">&#8249;</button>
+  <button class="hero-arrow next" id="heroNext" aria-label="Ďalšia fotka">&#8250;</button>
+  <div class="hero-dots" id="heroDots"></div>
+  <div class="hero-content">
+    <span class="hero-tag">Na predaj &middot; Priamo od majiteľa</span>
+    <h1>3-izbový byt SkyPark 4</h1>
+    <p class="loc">Bottova 5, Bratislava &middot; Sky Park, 4. veža</p>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat"><div class="v">3i</div><div class="k">Dispozícia</div></div>
+    <div class="stat"><div class="v">86,7 m²</div><div class="k">Byt 80 m² + loggia 6,4 m²</div></div>
+    <div class="stat"><div class="v">10. p.</div><div class="k">Poschodie</div></div>
+    <div class="stat"><div class="v">Východ</div><div class="k">Orientácia &middot; výhľad na Ružinov</div></div>
+  </div>
+</div>
+
+<section id="o-byte">
+  <div class="section-head">
+    <div class="eyebrow">Popis nehnuteľnosti</div>
+    <h2>Byt v Sky Parku s výhľadom na Ružinov</h2>
+  </div>
+  <div class="desc-grid">
+    <div>
+      <p>
+        Na predaj priamo od majiteľa ponúkame 3-izbový byt v projekte Sky Park, vo 4. veži na
+        ulici Bottova 5 v Bratislave. Byt s úžitkovou plochou 80 m² a priestrannou loggiou
+        6,4 m² (spolu 86,7 m²) sa nachádza na 10. poschodí, s orientáciou na východ a výhľadom
+        na Ružinov.
+      </p>
+      <p>
+        Súčasťou ponuky je aj garážové státie na -2. podlaží, vybavené veľmi žiadanou elektrickou
+        nabíjačkou pre elektromobily.
+      </p>
+      <p>
+        K bytu je k dispozícii čerstvo vypracovaný znalecký posudok, pripravený k hypotéke,
+        v ktorom je byt spolu so státím ocenený na 620 000 €.
+      </p>
+    </div>
+    <div class="side-card">
+      <h3>Základné údaje</h3>
+      <ul>
+        <li><span class="k">Typ</span><span class="v">3-izbový byt</span></li>
+        <li><span class="k">Úžitková plocha</span><span class="v">80 m² + loggia 6,4 m²</span></li>
+        <li><span class="k">Spolu</span><span class="v">86,7 m²</span></li>
+        <li><span class="k">Poschodie</span><span class="v">10.</span></li>
+        <li><span class="k">Orientácia</span><span class="v">Východ (výhľad na Ružinov)</span></li>
+        <li><span class="k">Garážové státie</span><span class="v">-2. podlažie, s el. nabíjačkou</span></li>
+        <li><span class="k">Znalecký posudok</span><span class="v">620 000 € (byt + státie)</span></li>
+        <li><span class="k">Predáva</span><span class="v">Priamo majiteľ</span></li>
+      </ul>
+      <div class="price-note">
+        Cena dohodou. Orientačne: byt 561 000 €, garážové státie 49 000 €.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vybava">
+  <div class="section-head">
+    <div class="eyebrow">Vybavenie a výhody</div>
+    <h2>Čo byt ponúka</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="ic">🌇</div>
+      <h4>Výhľad na Ružinov</h4>
+      <p>Orientácia na východ z 10. poschodia poskytuje otvorený výhľad na mesto.</p>
+    </div>
+    <div class="feature">
+      <div class="ic">🌿</div>
+      <h4>Priestranná loggia</h4>
+      <p>Loggia s rozlohou 6,4 m² ako súčasť celkových 86,7 m².</p>
+    </div>
+    <div class="feature">
+      <div class="ic">🔌</div>
+      <h4>Elektrická nabíjačka</h4>
+      <p>Garážové státie na -2. podlaží s veľmi žiadanou nabíjačkou pre elektromobily.</p>
+    </div>
+    <div class="feature">
+      <div class="ic">📄</div>
+      <h4>Znalecký posudok k hypotéke</h4>
+      <p>Čerstvo vypracovaný posudok, pripravený na financovanie kúpy.</p>
+    </div>
+    <div class="feature">
+      <div class="ic">🏙️</div>
+      <h4>Projekt Sky Park</h4>
+      <p>Bývanie vo veži 4 rezidenčného komplexu Sky Park na Bottovej ulici.</p>
+    </div>
+    <div class="feature">
+      <div class="ic">🤝</div>
+      <h4>Priamo od majiteľa</h4>
+      <p>Predaj bez realitnej kancelárie, cena dohodou.</p>
+    </div>
+  </div>
+</section>
+
+<section id="galeria" class="gallery-section">
+  <div class="section-head">
+    <div class="eyebrow">Fotogaléria</div>
+    <h2>Prezrite si byt aj výhľad</h2>
+  </div>
+
+  <div class="gallery-tabs">
+    <button class="tab-btn active" data-tab="exterier">Exteriér a výhľad</button>
+    <button class="tab-btn" data-tab="obyvacka">Obývačka a kuchyňa</button>
+    <button class="tab-btn" data-tab="izby">Spálňa a pracovňa</button>
+    <button class="tab-btn" data-tab="kupelna">Kúpeľňa</button>
+    <button class="tab-btn" data-tab="chodba">Chodba</button>
+    <button class="tab-btn" data-tab="podorys">Pôdorys</button>
+  </div>
+
+  <div class="gallery-group active" data-group="exterier">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="dron.jpg" alt="Letecký pohľad na Sky Park" data-caption="Letecký pohľad na Sky Park"></div>
+      <div class="g-item"><img src="vyhlad1.jpg" alt="Výhľad z bytu" data-caption="Výhľad z bytu na Ružinov"></div>
+      <div class="g-item"><img src="vyhlad2.jpg" alt="Výhľad z bytu" data-caption="Výhľad z bytu"></div>
+    </div>
+  </div>
+
+  <div class="gallery-group" data-group="obyvacka">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="obyvacka.jfif" alt="Obývacia izba" data-caption="Obývacia izba"></div>
+      <div class="g-item"><img src="obyvka.jfif" alt="Obývacia izba" data-caption="Obývacia izba"></div>
+      <div class="g-item"><img src="roh-kuchyna.jfif" alt="Kuchynský kút" data-caption="Kuchynský kút"></div>
+    </div>
+  </div>
+
+  <div class="gallery-group" data-group="izby">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="izba.jfif" alt="Izba" data-caption="Izba"></div>
+      <div class="g-item"><img src="postel.jfif" alt="Spálňa" data-caption="Spálňa"></div>
+      <div class="g-item"><img src="pracovna.jfif" alt="Pracovňa" data-caption="Pracovňa"></div>
+      <div class="g-item"><img src="skrina.jfif" alt="Vstavaná skriňa" data-caption="Vstavaná skriňa"></div>
+    </div>
+  </div>
+
+  <div class="gallery-group" data-group="kupelna">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="kupelka1.jpg" alt="Kúpeľňa" data-caption="Kúpeľňa"></div>
+      <div class="g-item"><img src="kupelka2.jpg" alt="Kúpeľňa" data-caption="Kúpeľňa"></div>
+      <div class="g-item"><img src="kupelka3.jpg" alt="Kúpeľňa" data-caption="Kúpeľňa"></div>
+      <div class="g-item"><img src="zachod.jpg" alt="WC" data-caption="WC"></div>
+    </div>
+  </div>
+
+  <div class="gallery-group" data-group="chodba">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="chodba.jpg" alt="Chodba" data-caption="Chodba"></div>
+      <div class="g-item"><img src="chodba-vesiak.jpg" alt="Chodba - vešiak" data-caption="Chodba"></div>
+    </div>
+  </div>
+
+  <div class="gallery-group" data-group="podorys">
+    <div class="g-grid">
+      <div class="g-item wide"><img src="podorys.jpg" alt="Pôdorys bytu" data-caption="Pôdorys bytu"></div>
+    </div>
+  </div>
+</section>
+
+<section id="kontakt">
+  <div class="cta">
+    <div>
+      <h3>Zaujal vás tento byt?</h3>
+      <p>Dohodnite si obhliadku alebo si vyžiadajte viac informácií vrátane znaleckého posudku.</p>
+    </div>
+    <a class="cta-btn" href="tel:+421911954443">📞 +421 911 954 443</a>
+  </div>
+</section>
+
+<footer>
+  3-izbový byt &middot; Sky Park, Bottova 5, Bratislava (4. veža)
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">&times;</button>
+  <button class="lb-prev" id="lbPrev">&#8249;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-next" id="lbNext">&#8250;</button>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+(function(){
+  // Hero image -> jump to gallery
+  var heroSlidesWrap = document.getElementById('heroSlides');
+  function goToGallery(){
+    document.getElementById('galeria').scrollIntoView({behavior:'smooth'});
+  }
+  heroSlidesWrap.addEventListener('click', goToGallery);
+  heroSlidesWrap.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goToGallery(); }
+  });
+
+  // Hero carousel
+  var heroSlides = document.querySelectorAll('#heroSlides .hero-slide');
+  var heroDotsWrap = document.getElementById('heroDots');
+  var heroIndex = 0;
+  var heroTimer;
+
+  heroSlides.forEach(function(_, i){
+    var dot = document.createElement('button');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Fotka ' + (i + 1));
+    dot.addEventListener('click', function(){ goToHero(i); });
+    heroDotsWrap.appendChild(dot);
+  });
+  var heroDots = heroDotsWrap.querySelectorAll('.hero-dot');
+
+  function goToHero(i){
+    heroSlides[heroIndex].classList.remove('active');
+    heroDots[heroIndex].classList.remove('active');
+    heroIndex = (i + heroSlides.length) % heroSlides.length;
+    heroSlides[heroIndex].classList.add('active');
+    heroDots[heroIndex].classList.add('active');
+  }
+  function nextHero(){ goToHero(heroIndex + 1); }
+  function prevHero(){ goToHero(heroIndex - 1); }
+  function resetHeroTimer(){
+    clearInterval(heroTimer);
+    heroTimer = setInterval(nextHero, 5500);
+  }
+
+  document.getElementById('heroNext').addEventListener('click', function(e){ e.stopPropagation(); nextHero(); resetHeroTimer(); });
+  document.getElementById('heroPrev').addEventListener('click', function(e){ e.stopPropagation(); prevHero(); resetHeroTimer(); });
+  resetHeroTimer();
+
+  // Tabs
+  var tabs = document.querySelectorAll('.tab-btn');
+  var groups = document.querySelectorAll('.gallery-group');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      groups.forEach(function(g){ g.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelector('.gallery-group[data-group="'+tab.dataset.tab+'"]').classList.add('active');
+    });
+  });
+
+  // Lightbox
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCaption = document.getElementById('lbCaption');
+  var currentImages = [];
+  var currentIndex = 0;
+
+  function openLightbox(images, index){
+    currentImages = images;
+    currentIndex = index;
+    showCurrent();
+    lightbox.classList.add('open');
+  }
+  function showCurrent(){
+    var img = currentImages[currentIndex];
+    lbImg.src = img.getAttribute('src');
+    lbCaption.textContent = img.getAttribute('data-caption') || '';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+  }
+
+  document.querySelectorAll('.gallery-group').forEach(function(group){
+    var items = group.querySelectorAll('.g-item img');
+    items.forEach(function(img, idx){
+      img.addEventListener('click', function(){
+        openLightbox(Array.prototype.slice.call(items), idx);
+      });
+    });
+  });
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', function(){
+    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+    showCurrent();
+  });
+  document.getElementById('lbNext').addEventListener('click', function(){
+    currentIndex = (currentIndex + 1) % currentImages.length;
+    showCurrent();
+  });
+  lightbox.addEventListener('click', function(e){
+    if(e.target === lightbox){ closeLightbox(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowLeft'){ currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; showCurrent(); }
+    if(e.key === 'ArrowRight'){ currentIndex = (currentIndex + 1) % currentImages.length; showCurrent(); }
+  });
+})();
+</script>
+
+</body>
+</html>
