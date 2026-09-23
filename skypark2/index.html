@@ -561,6 +561,17 @@
       openLightbox(Array.prototype.slice.call(items), 0, currentGroupIndex);
     }
   }
+  function retreatLightbox(){
+    if (currentIndex > 0) {
+      currentIndex--;
+      showCurrent();
+    } else {
+      currentGroupIndex = (currentGroupIndex - 1 + groups.length) % groups.length;
+      switchToGroup(currentGroupIndex);
+      var items = groups[currentGroupIndex].querySelectorAll('.g-item img');
+      openLightbox(Array.prototype.slice.call(items), items.length - 1, currentGroupIndex);
+    }
+  }
 
   document.querySelectorAll('.gallery-group').forEach(function(group, groupIdx){
     var items = group.querySelectorAll('.g-item img');
@@ -573,8 +584,7 @@
 
   document.getElementById('lbClose').addEventListener('click', closeLightbox);
   document.getElementById('lbPrev').addEventListener('click', function(){
-    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-    showCurrent();
+    retreatLightbox();
   });
   document.getElementById('lbNext').addEventListener('click', function(){
     advanceLightbox();
@@ -589,7 +599,7 @@
   document.addEventListener('keydown', function(e){
     if(!lightbox.classList.contains('open')) return;
     if(e.key === 'Escape') closeLightbox();
-    if(e.key === 'ArrowLeft'){ currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; showCurrent(); }
+    if(e.key === 'ArrowLeft'){ retreatLightbox(); }
     if(e.key === 'ArrowRight'){ advanceLightbox(); }
   });
 })();
